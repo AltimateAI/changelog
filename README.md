@@ -105,7 +105,28 @@ See [STYLE.md](./STYLE.md) for tone, voice, and what makes a good entry. The `/c
 
 ## Drafts
 
-Set `draft: true` in frontmatter. The website skips draft entries. Useful for staging unreleased content for review.
+Set `draft: true` in frontmatter. The website skips draft entries from the published `/changelog` page. Drafts **are** visible in branch preview mode (see below).
+
+## Preview your entry before merging
+
+You don't need to run the website locally. The live site supports a `?branch=` query param that loads entries from any branch of this repo.
+
+1. Push your work to a branch in this repo (e.g. `feat/lineage-export-png`).
+2. Open the live site with that branch as the query param:
+
+   ```
+   https://altimate.ai/changelog?branch=feat/lineage-export-png
+   ```
+
+3. You'll see exactly how your entry renders — same v2 chrome, same card layout, same `// SHIPPED BY` footer — with a yellow banner at the top reminding you that you're previewing a non-main branch.
+4. Iterate with more commits to the same branch. The site fetches fresh from GitHub on every page load (no CDN cache), so a hard refresh is enough to see your latest push.
+5. Once the PR merges, drop the `?branch=` and the entry is live at `/changelog`.
+
+**Notes:**
+
+- Drafts (`draft: true`) are visible in preview mode but hidden on the main `/changelog`.
+- The branch name must match `^[a-zA-Z0-9/_.\-]+$` — anything weird falls back to `main`.
+- This works on the live `altimate.ai` site and on any Amplify branch preview of the website (e.g. `https://feat-changelog-v2.<app-id>.amplifyapp.com/changelog?branch=…`).
 
 ## How the website consumes this repo
 

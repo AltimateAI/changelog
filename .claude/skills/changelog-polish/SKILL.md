@@ -61,6 +61,14 @@ Respond in this order:
 
 5. **Offer to write it.** End with a single line: "Want me to write this to <path>?" If the user said yes, use the Write tool to overwrite the file. Otherwise leave their draft untouched.
 
+6. **Mention the preview URL once.** If the engineer has pushed their branch, the entry can be previewed live (with the real website chrome) at:
+
+   ```
+   https://altimate.ai/changelog?branch=<their-branch>
+   ```
+
+   Add this line to your response only if the engineer hasn't pushed yet — useful for "ready to iterate visually" handoff. Don't reprint it every turn.
+
 ## Voice for your response
 
 Match the same voice the changelog itself uses: direct, concrete, no theatre. No "Certainly!" or "I'd be happy to". If the draft is bad, say so plainly and then fix it. If it's good, say so plainly and ship a small polish.

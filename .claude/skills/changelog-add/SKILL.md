@@ -96,11 +96,19 @@ Once confirmed:
    Wrote entries/<filename> — validator passed.
 
    Next:
+     git checkout -b <branch>          # e.g. feat/<slug>
      git add entries/<filename>
      git commit -m "changelog: <title>"
      git push -u origin <branch>
      gh pr create
+
+   Preview live (no local dev server needed):
+     https://altimate.ai/changelog?branch=<branch>
    ```
+
+   Substitute the actual branch name. The preview URL shows the entry on the
+   real website with the v2 chrome and card layout, drafts visible. Drop the
+   `?branch=` param once the PR merges.
 
 ## Voice for your responses
 

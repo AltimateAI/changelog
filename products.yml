@@ -16,6 +16,28 @@ products:
 # Hosts allowed in body links, hero media, and image sources.
 # Anything outside this list is rejected at CI to keep the changelog free of
 # random third-party embeds.
+# Pixel-art keys engineers can pick as their byline avatar. Each name maps
+# to a 32x32 pixel illustration in altimate-website/src/components/v2/illustrations.js.
+# Keep this in sync if illustrations are added/removed there.
+author_pixels:
+  - HUMAN
+  - ROBOT
+  - GLOBE
+  - BOLT
+  - HEX
+  - TERMINAL
+  - TEAM
+  - ORBIT
+  - COIN
+  - ALERT
+  - HOURGLASS
+  - DOLLAR
+  - BRACKETS
+  - CODE_WINDOW
+  - GRID
+  - STACK
+  - CHIP
+
 allowed_hosts:
   - youtube.com
   - www.youtube.com

@@ -1,0 +1,9 @@
+# Every change requires review from someone who owns the site rendering it.
+# Update the team/user reference below to match your org structure — without
+# a real owner here, GitHub branch protection's "Require review from
+# Code Owners" toggle has nothing to enforce.
+*                       @anandgupta42
+/.github/               @anandgupta42
+/products.yml           @anandgupta42
+/.github/scripts/       @anandgupta42
+/.github/workflows/     @anandgupta42

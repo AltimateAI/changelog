@@ -1,0 +1,24 @@
+# Config for engineers who use the `pre-commit` framework
+# (https://pre-commit.com). Install once: `pip install pre-commit && pre-commit install`.
+#
+# Engineers who prefer not to install the framework can instead run:
+#   git config core.hooksPath .githooks
+# which wires up the native shell hook at .githooks/pre-commit.
+
+repos:
+  - repo: local
+    hooks:
+      - id: validate-changelog
+        name: Validate changelog entries
+        entry: python3 .github/scripts/validate.py
+        language: python
+        additional_dependencies: ["pyyaml==6.0.2"]
+        # Only fire when changelog content actually changes.
+        files: ^(entries/.*\.md|products\.yml|\.github/scripts/validate\.py)$
+        pass_filenames: false
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.18.1
+    hooks:
+      - id: markdownlint-cli2
+        files: ^entries/.*\.md$

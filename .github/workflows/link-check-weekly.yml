@@ -1,0 +1,41 @@
+name: Weekly link rot check
+
+# Runs every Monday 09:00 UTC against everything that's already on main.
+# Files an issue if any link broke since last week so we hear about rot before
+# customers do.
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run lychee
+        id: lychee
+        uses: lycheeverse/lychee-action@82202e5e9c2f4ef1a55a3d02563e1cb6041e5332 # v2.4.1
+        with:
+          args: >-
+            --no-progress
+            --timeout 15
+            --max-retries 3
+            --retry-wait-time 10
+            --accept 200,206,429
+            entries/**/*.md
+          fail: false
+
+      - name: File rot issue
+        if: env.lychee_exit_code != '0'
+        uses: peter-evans/create-issue-from-file@e8ef132d6df98ed982188e460ebb3b5d4ef3a9cd # v5.0.1
+        with:
+          title: Weekly link rot report — ${{ github.run_id }}
+          content-filepath: ./lychee/out.md
+          labels: link-rot, bot

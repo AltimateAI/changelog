@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Local pre-commit hook for the changelog repo.
+# Runs the same validator that gates merges in CI, so failures surface before
+# you push instead of during code review.
+#
+# Enable once per clone:
+#   git config core.hooksPath .githooks
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Only run the validator when the commit actually touches changelog content.
+# Saves a few seconds when you're committing a README tweak or workflow change.
+CHANGED=$(git diff --cached --name-only --diff-filter=ACMR -- \
+    entries/ products.yml .github/scripts/validate.py)
+if [ -z "$CHANGED" ]; then
+    exit 0
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "pre-commit: python3 not found — skipping changelog validation." >&2
+    echo "Install Python 3.10+ or use --no-verify if you're sure." >&2
+    exit 0
+fi
+
+if ! python3 -c "import yaml" >/dev/null 2>&1; then
+    echo "pre-commit: PyYAML not installed in this Python." >&2
+    echo "Install with: python3 -m pip install --user 'pyyaml==6.0.2'" >&2
+    exit 1
+fi
+
+python3 .github/scripts/validate.py

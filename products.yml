@@ -1,0 +1,31 @@
+# Closed list of valid product slugs.
+# The validator rejects entries that reference a product not in this list.
+# To add a product: PR an update here AND add it to the filter UI in altimate-website.
+products:
+  - slug: dbt-power-user
+    name: dbt Power User
+  - slug: snowflake-app
+    name: Snowflake App
+  - slug: databricks-app
+    name: Databricks App
+  - slug: altimate-code
+    name: Altimate Code
+  - slug: datamates
+    name: Datamates
+
+# Hosts allowed in body links, hero media, and image sources.
+# Anything outside this list is rejected at CI to keep the changelog free of
+# random third-party embeds.
+allowed_hosts:
+  - youtube.com
+  - www.youtube.com
+  - youtu.be
+  - loom.com
+  - www.loom.com
+  - vimeo.com
+  - player.vimeo.com
+  - github.com
+  - raw.githubusercontent.com
+  - altimate.ai
+  - www.altimate.ai
+  - docs.altimate.ai

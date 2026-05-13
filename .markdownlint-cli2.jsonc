@@ -1,0 +1,45 @@
+{
+  // markdownlint config. Rule reference: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+  "config": {
+    "default": true,
+
+    // Body must not start with an h1 — the entry's `title` frontmatter is already the heading.
+    "first-line-heading": false,
+
+    // We don't enforce a hard line length; prose readability beats arbitrary wrapping.
+    "line-length": false,
+
+    // Inline HTML is blocked by the Python validator with a stricter list of tags.
+    // markdownlint's MD033 would also flag harmless tags like <br>, so we disable it here.
+    "no-inline-html": false,
+
+    // Allow trailing punctuation in headings (engineers will want "What's new?" etc.).
+    "no-trailing-punctuation": false,
+
+    // Bare URLs are allowed — react-markdown auto-links them and the validator host-checks them.
+    "no-bare-urls": false,
+
+    // Multiple top-level headings (h1) are still forbidden; bodies use h2+ only.
+    "single-h1": true,
+
+    // Force alt text on images — empty alt is bad a11y.
+    "no-alt-text": true,
+
+    // Consistent list markers (dash) and indentation.
+    "ul-style": { "style": "dash" },
+
+    // Strip trailing whitespace.
+    "no-trailing-spaces": true,
+
+    // At most one consecutive blank line.
+    "no-multiple-blanks": { "maximum": 1 },
+
+    // No tabs.
+    "no-hard-tabs": true,
+
+    // Files end with a single newline.
+    "single-trailing-newline": true
+  },
+  "globs": ["entries/**/*.md"],
+  "ignores": []
+}

@@ -197,12 +197,20 @@ def check_frontmatter(
     return errors
 
 
-def check_body(rel: Path, body: str, config: dict) -> list[str]:
+def check_body(
+    rel: Path, body: str, has_description: bool, config: dict
+) -> list[str]:
     errors: list[str] = []
 
     stripped = body.strip()
     if not stripped:
-        errors.append(f"{rel}: body is empty — add at least one sentence")
+        # One-liner entries can use just the `description` field with no
+        # markdown body — but every entry must have at least one of them.
+        if not has_description:
+            errors.append(
+                f"{rel}: entry has no content — set `description` in frontmatter "
+                f"or write a body paragraph"
+            )
         return errors
 
     # The card already renders the title — bodies should open with prose,
@@ -305,7 +313,11 @@ def validate_entry(path: Path, config: dict) -> list[str]:
         return errors
 
     errors.extend(check_frontmatter(rel, front, filename_date, config))
-    errors.extend(check_body(rel, fm_match.group(2), config))
+    has_description = bool(
+        isinstance(front.get("description"), str)
+        and front.get("description").strip()
+    )
+    errors.extend(check_body(rel, fm_match.group(2), has_description, config))
 
     return errors
 

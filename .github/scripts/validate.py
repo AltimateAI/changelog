@@ -50,8 +50,13 @@ BARE_URL_RE = re.compile(r"(?<![(<\w])(https?://[^\s)<>\"']+)")
 LEADING_HEADING_RE = re.compile(r"^\s*#{1,6}\s+\S", re.MULTILINE)
 
 ALLOWED_FRONTMATTER_KEYS = {
-    "title", "date", "products", "tag", "emoji", "hero", "draft", "description",
+    "title", "date", "products", "tag", "emoji", "hero", "draft",
+    "description", "authors",
 }
+
+# `authors` accepts lines of the form "Name:PIXEL_KEY". The split is at the
+# *last* colon so names can contain colons if needed.
+AUTHOR_RE = re.compile(r"^(.+):([A-Z][A-Z_]*)$")
 
 
 def load_config() -> dict:
@@ -60,6 +65,7 @@ def load_config() -> dict:
     return {
         "product_slugs": {p["slug"] for p in config.get("products", [])},
         "allowed_hosts": {h.lower() for h in config.get("allowed_hosts", [])},
+        "author_pixels": set(config.get("author_pixels", [])),
     }
 
 
@@ -177,6 +183,36 @@ def check_frontmatter(
     if draft is not None and not isinstance(draft, bool):
         errors.append(f"{rel}: draft must be a boolean if present")
 
+    # authors (optional) — list of "Name:PIXEL_KEY" strings
+    authors = front.get("authors")
+    if authors is not None:
+        if not isinstance(authors, list) or not authors:
+            errors.append(
+                f"{rel}: authors must be a non-empty list of "
+                f"\"Name:PIXEL_KEY\" strings if present"
+            )
+        else:
+            for author in authors:
+                if not isinstance(author, str):
+                    errors.append(f"{rel}: author {author!r} must be a string")
+                    continue
+                match = AUTHOR_RE.match(author.strip())
+                if not match:
+                    errors.append(
+                        f"{rel}: author {author!r} must be formatted as "
+                        f"\"Full Name:PIXEL_KEY\" (e.g. \"Anand Gupta:ROBOT\")"
+                    )
+                    continue
+                name, pixel = match.group(1).strip(), match.group(2)
+                if not name:
+                    errors.append(f"{rel}: author has empty name in {author!r}")
+                if pixel not in config["author_pixels"]:
+                    valid = ", ".join(sorted(config["author_pixels"]))
+                    errors.append(
+                        f"{rel}: author pixel {pixel!r} not allowed. "
+                        f"Pick one of: {valid}"
+                    )
+
     # hero (optional)
     hero = front.get("hero")
     if hero is not None:
@@ -197,12 +233,20 @@ def check_frontmatter(
     return errors
 
 
-def check_body(rel: Path, body: str, config: dict) -> list[str]:
+def check_body(
+    rel: Path, body: str, has_description: bool, config: dict
+) -> list[str]:
     errors: list[str] = []
 
     stripped = body.strip()
     if not stripped:
-        errors.append(f"{rel}: body is empty — add at least one sentence")
+        # One-liner entries can use just the `description` field with no
+        # markdown body — but every entry must have at least one of them.
+        if not has_description:
+            errors.append(
+                f"{rel}: entry has no content — set `description` in frontmatter "
+                f"or write a body paragraph"
+            )
         return errors
 
     # The card already renders the title — bodies should open with prose,
@@ -305,7 +349,11 @@ def validate_entry(path: Path, config: dict) -> list[str]:
         return errors
 
     errors.extend(check_frontmatter(rel, front, filename_date, config))
-    errors.extend(check_body(rel, fm_match.group(2), config))
+    has_description = bool(
+        isinstance(front.get("description"), str)
+        and front.get("description").strip()
+    )
+    errors.extend(check_body(rel, fm_match.group(2), has_description, config))
 
     return errors
 

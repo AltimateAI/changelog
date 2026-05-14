@@ -8,6 +8,6 @@ draft: true
 description: Skills configured on a Teammate now deliver as Cursor `.mdc`, Copilot `.instructions.md`, or Cline `.clinerules/skills/<id>/SKILL.md` files to your workspace automatically.
 ---
 
-Datamate Skills are push-based markdown instructions that tell an AI agent when and how to use Datamate MCP tools. From April, the MCP server extension reads each Teammate's `skills[]` from the API and writes them as instruction files into the workspace in the right format for whichever IDE you're running.
+Datamate Skills are push-based markdown instructions that tell an AI agent when and how to use Datamate MCP tools. The MCP server now reads each Teammate's skills and lands them in the right format for whichever IDE you're running — Cursor, Copilot, and Cline are all supported, with conditional activation so each skill only applies to the files it's scoped to.
 
-Cursor gets `.mdc` files with conditional activation (`alwaysApply` and globs); Copilot gets `.instructions.md`; Cline picks up native `.clinerules/skills/<id>/SKILL.md` files with YAML frontmatter, matching Claude Code's layout. Custom skills slug their file names with an ID suffix so two skills with the same display name don't collide. The DatamateCard shows the custom-skill count alongside Assists and Guardrails, and `always_active` skills attach to every conversation regardless of context.
+Custom skills count toward the per-Teammate budget shown on the DatamateCard alongside Assists and Guardrails, and skills marked "always active" attach to every conversation regardless of which file you're editing.

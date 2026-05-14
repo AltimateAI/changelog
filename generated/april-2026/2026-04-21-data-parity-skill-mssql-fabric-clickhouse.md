@@ -8,6 +8,6 @@ draft: true
 description: Altimate Code can now diff data across SQL Server / Azure Fabric and ClickHouse with partition-aware execution and seven Azure AD auth flows.
 ---
 
-Altimate Code's `data_diff` tool now handles three more warehouses end-to-end. SQL Server and Azure Fabric drop in with full T-SQL support — `TOP` injection, `sys.*` catalog queries, `DATETRUNC()` and `CONVERT(DATE, …, 23)` for date partitioning. Azure AD authentication covers seven flows (`default`, `password`, `access-token`, `service-principal-secret`, `msi-vm`, `msi-app-service`), with shorthand aliases (`cli`, `msi`, `service-principal`) for the common cases.
+Altimate Code's `data_diff` tool now handles three more warehouses end-to-end: SQL Server, Azure Fabric, and ClickHouse — all with partition-aware execution so large tables diff in independent chunks instead of one monolithic scan.
 
-The orchestrator that drives the diff is now a TypeScript layer that runs SQL tasks produced by the Rust state machine and feeds results back — so the algorithm and the database access stay independently swappable, and partitioned diffs run independently per partition before merging outcomes.
+Azure AD authentication is supported for SQL Server and Fabric, covering the common service-principal, MSI, and CLI flows.

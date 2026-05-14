@@ -4,6 +4,9 @@ __pycache__/
 .venv/
 .lycheecache
 
+# Local commit-message scratch (referenced by general.md commit workflow)
+.github/meta/
+
 # Pipeline artifacts (raw release/PR data fetched from private repos)
 data/
 

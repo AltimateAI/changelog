@@ -8,6 +8,6 @@ draft: true
 description: The Altimate MCP chat panel opens with no perceptible delay, lives on the editor title bar, and shows live token usage in the header.
 ---
 
-Opening the Altimate MCP chat panel used to wait for an `isInstalled()` check before rendering. The panel now appears immediately and runs the install check on the webview-ready handler, so there's no perceptible delay between clicking and seeing the panel.
+The Altimate MCP chat panel now opens instantly — no waiting on a startup check before the panel renders.
 
-A new Altimate icon lands on the editor title bar (right after the run button) for one-click access without the command palette. The header also picks up a compact token usage indicator pulled from `/payment/token-usage` — usage percentage color-coded blue / orange / red against your monthly threshold, or "Unlimited" on unlimited plans. Click it for a detailed popover with allowance, grants, overage, billing period, and wallet balance.
+A new Altimate icon lands on the editor title bar for one-click access without the command palette. The header also picks up a compact token usage indicator — usage percentage color-coded against your monthly threshold, or "Unlimited" on unlimited plans. Click it for a detailed popover with allowance, grants, overage, billing period, and wallet balance.
